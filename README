@@ -1,1 +1,3 @@
-See http://map.placemarklist.com/2011/08/form-inline-edit.html.
+Form Inline Edit creates inline text inputs or textareas by clicking on anchors. It relies on external forms and hidden inputs to submit data. Callbacks and options are provided for flexibility. Works for multiple instances.
+
+See http://map.placemarklist.com/2011/08/form-inline-edit.html for more.
