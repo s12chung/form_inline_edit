@@ -2,8 +2,9 @@
     $.fn.form_inline_edit = function(options) {
         var defaults = {
             id: null,
-            class: "",
+            class: "form_inline_text_field",
             textarea: false,
+            return_key_finish: true,
             select_all: false,
             undo_empty: true,
             empty_text: "&nbsp;&nbsp;&nbsp;",
@@ -15,7 +16,6 @@
         //finished: function(value, valid) { }
         options = $.extend(defaults, options);
 
-        var text_field_class = "form_inline_text_field";
         var id_index = 0;
 
         return this.each(function() {
@@ -42,13 +42,15 @@
                 if (options.finished) options.finished(final_val, options.valid_check(final_val));
             };
             $text_field.blur($text_field.finished);
-            $text_field.keydown(function(event){
-                if( (event.keyCode == 13 && !event.shiftKey) ) {
-                    $text_field.finished();
-                    event.preventDefault();
-                    return false;
-                }
-            });
+            if (options.return_key_finish) {
+                $text_field.keydown(function(event){
+                    if( (event.keyCode == 13 && !event.shiftKey) ) {
+                        $text_field.blur();
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            }
 
             $self.show_text_field = function() {
                 $self.hide();
@@ -64,7 +66,6 @@
             var empty = is_empty($self.html());
             if (!options.valid_check($self.html())) {
                 $self.show_text_field();
-                $text_field.blur();
             }
             if (empty)
                 $self.html(options.empty_text);
@@ -89,7 +90,7 @@
                 $text_field.attr({ type: 'text' });
             }
 
-            $text_field.addClass(options.class + " " + text_field_class);
+            $text_field.addClass(options.class);
             if (options.id) {
                 $text_field.attr( { id: options.id + (id_index > 0 ? id_index : "")});
                 id_index++;
