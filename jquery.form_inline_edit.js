@@ -36,7 +36,8 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
                 $.form_inline_edit($(this), options, id_index);
             });
         },
-        show_text_field : function(focus) { return this.trigger('show_text_field', focus); }
+        show_text_field : function(focus) { return this.trigger('show_text_field', focus); },
+        hide_text_field : function() { return this.trigger('hide_text_field'); }
     });
 
     $.form_inline_edit = function($self, options, id_index) {
@@ -63,8 +64,8 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
         if (is_empty($self.html()))
             $self.html(options.empty_text);
 
-        $self.bind('show_text_field', function(event, focus) { start(focus); });
-
+        $self.bind('show_text_field', function(event, focus) { return start(focus); });
+        $self.bind('hide_text_field', function(event) { return finish(); });
 
         function start(focus) {
             focus = d(focus, true);
