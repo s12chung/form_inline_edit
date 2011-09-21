@@ -16,8 +16,8 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
     $.fn.extend({
         form_inline_edit: function(options) {
             var defaults = {
-                id: null,
-                class: "form_inline_text_field",
+                _id: null,
+                _class: "form_inline_text_field",
                 textarea: false,
                 return_key_finish: true,
                 select_all: false,
@@ -65,7 +65,7 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
             $self.html(options.empty_text);
 
         $self.bind('show_text_field', function(event, focus) { return start(focus); });
-        $self.bind('hide_text_field', function(event) { return finish(); });
+        $self.bind('hide_text_field', function() { return finish(); });
 
         function start(focus) {
             focus = d(focus, true);
@@ -115,9 +115,9 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
                 $text_field.attr({ type: 'text' });
             }
 
-            $text_field.addClass(options.class);
-            if (options.id) {
-                $text_field.attr( { id: options.id + (id_index > 0 ? id_index : "")});
+            $text_field.addClass(options._class);
+            if (options._id) {
+                $text_field.attr( { id: options._id + (id_index > 0 ? id_index : "")});
                 id_index++;
             }
             $text_field.hide();
