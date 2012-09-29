@@ -1,7 +1,7 @@
 /*!
  * Form Inline Edit
  * http://map.placemarklist.com/2011/08/form-inline-edit.html
- * Copyright (c) 2012 Steven Chung
+ * Copyright (c) 2011-2012 Steven Chung
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
 (function($){
