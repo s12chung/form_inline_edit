@@ -12,7 +12,9 @@
                 valid_check: function(value) { return true; },
                 started: null,
                 finished: null,
-                blur_ignore: []
+                always_edit: false,
+                blur_ignore: [],
+                start_delay_time: 100
             };
             //start: function() {}
             //finished: function(value, valid) { }
@@ -58,41 +60,57 @@
             start();
         if (is_empty($self.html()))
             $self.html(options.empty_text);
+        if (options.always_edit) {
+            $text_field.focus(function() { start(false); });
+            show_text_field();
+        }
 
         $self.bind('show_text_field', function(event, focus) { return start(focus); });
         $self.bind('hide_text_field', function() { return finish(); });
 
         function start(focus) {
-            focus = d(focus, true);
-            $self.hide();
+            setTimeout(function() {
+                if (!options.always_edit) {
+                    focus = d(focus, true);
+                    show_text_field();
+                    if (focus) {
+                        $text_field.focus();
+                        if (options.select_all)
+                            $text_field.select();
+                    }
+                }
 
+                if (options.started) options.started();
+            }, options.start_delay_time)
+        }
+        function show_text_field() {
+            $self.hide();
             $text_field.val($self.html().replace(options.empty_text, ""));
             $text_field.show();
-            if (focus) {
-                $text_field.focus();
-                if (options.select_all)
-                    $text_field.select();
-            }
-
-            if (options.started) options.started();
         }
         function finish() {
             var valid = options.valid_check($text_field.val());
             var empty = is_empty($text_field.val());
+            var value = $text_field.val();
+
             if (valid || (empty && options.undo_empty && $self.html() != options.empty_text)) {
-                $self.show();
-                $text_field.hide();
+                if (!options.always_edit) {
+                    $self.show();
+                    $text_field.hide();
+                }
 
                 if (!(empty && options.undo_empty)) {
-                    var value = $text_field.val();
-                    if (empty)
-                        value = options.empty_text;
-                    $self.html(value);
-                    $($self.attr('href')).val($self.html());
+                    if (!options.always_edit) {
+                        if (empty)
+                            $self.html(options.empty_text);
+                        else
+                            $self.html(value);
+                    }
+                    $($self.attr('href')).val(value);
                 }
             }
-            var final_val = $self.html().replace(options.empty_text, "");
-            if (options.finished) options.finished(final_val, options.valid_check(final_val));
+
+            if (options.finished) options.finished(value, options.valid_check(value));
         }
 
         function is_empty(value) {
