@@ -33,9 +33,9 @@
         var $text_field = create_text_field();
         $self.after($text_field);
 
-        $self.click(function() {
+        $self.click(function(e) {
+            e.preventDefault();
             start();
-            return false;
         });
 
         //from http://stackoverflow.com/questions/4520108/cancelling-blur-handler-based-on-item-that-was-clicked
@@ -48,10 +48,10 @@
         });
 
         if (options.return_key_finish) {
-            $text_field.keydown(function(event){
-                if( (event.keyCode == 13 && !event.shiftKey) ) {
+            $text_field.keydown(function(e){
+                if( (e.keyCode == 13 && !e.shiftKey) ) {
+                    e.preventDefault();
                     $text_field.blur();
-                    return false;
                 }
             });
         }
