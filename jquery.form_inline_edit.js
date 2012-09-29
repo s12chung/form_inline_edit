@@ -40,11 +40,11 @@
 
         //from http://stackoverflow.com/questions/4520108/cancelling-blur-handler-based-on-item-that-was-clicked
         var timer;
-        $.each(options.blur_ignore, function(index,value) {
+        $.each(options.blur_ignore, function(index, value) {
             value.click(function() { if (timer) { clearTimeout(timer); timer = null; } });
         });
         $text_field.blur(function() {
-            setTimeout(function() { timer = null; finish(); }, 100);
+            timer = setTimeout(function() { timer = null; finish(); }, 150);
         });
 
         if (options.return_key_finish) {
