@@ -1,17 +1,3 @@
-/*
- MIT License
-
- Copyright (c) 2011 Steven Chung
-
- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
-
 (function($){
     $.fn.extend({
         form_inline_edit: function(options) {
@@ -25,7 +11,8 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
                 empty_text: "&nbsp;&nbsp;&nbsp;",
                 valid_check: function(value) { return true; },
                 started: null,
-                finished: null
+                finished: null,
+                blur_ignore: []
             };
             //start: function() {}
             //finished: function(value, valid) { }
@@ -49,7 +36,15 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
             return false;
         });
 
-        $text_field.blur(finish);
+        //from http://stackoverflow.com/questions/4520108/cancelling-blur-handler-based-on-item-that-was-clicked
+        var timer;
+        $.each(options.blur_ignore, function(index,value) {
+            value.click(function() { if (timer) { clearTimeout(timer); timer = null; } });
+        });
+        $text_field.blur(function() {
+            setTimeout(function() { timer = null; finish(); }, 100);
+        });
+
         if (options.return_key_finish) {
             $text_field.keydown(function(event){
                 if( (event.keyCode == 13 && !event.shiftKey) ) {
@@ -98,7 +93,6 @@ function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
             }
             var final_val = $self.html().replace(options.empty_text, "");
             if (options.finished) options.finished(final_val, options.valid_check(final_val));
-            return true;
         }
 
         function is_empty(value) {
