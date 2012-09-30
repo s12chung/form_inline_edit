@@ -37,7 +37,7 @@
     });
 
     $.form_inline_edit = function($self, options, id_index) {
-        function d(param, def) { return $.isDefined(param) ?  param : def; }
+        function d(param, def) { return typeof(param) != 'undefined' ?  param : def; }
 
         var $text_field = create_text_field();
         $self.after($text_field);
