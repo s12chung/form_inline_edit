@@ -6,8 +6,6 @@
  */
 
 (function($){
-    function d(param, def) { return $.isDefined(param) ?  param : def; }
-
     $.fn.extend({
         form_inline_edit: function(options) {
             var defaults = {
@@ -39,6 +37,8 @@
     });
 
     $.form_inline_edit = function($self, options, id_index) {
+        function d(param, def) { return $.isDefined(param) ?  param : def; }
+
         var $text_field = create_text_field();
         $self.after($text_field);
 
