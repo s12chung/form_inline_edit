@@ -4,7 +4,10 @@
  * Copyright (c) 2011-2012 Steven Chung
  * Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
  */
+
 (function($){
+    function d(param, def) { return $.isDefined(param) ?  param : def; }
+
     $.fn.extend({
         form_inline_edit: function(options) {
             var defaults = {
